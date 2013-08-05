@@ -71,7 +71,7 @@ function setupWebAudio() {
 
     function initGL(canvas) {
         canvas.width = document.body.clientWidth;
-        canvas.height = document.body.clientHeight;
+        //canvas.height = document.body.clientHeight;
         try {
             gl = canvas.getContext("experimental-webgl");
             gl.viewportWidth = canvas.width;
@@ -238,27 +238,29 @@ function setupWebAudio() {
     function handleKeys() {
         if (currentlyPressedKeys[33]) {
             // Page Up
-            zoom -= 0.1;
+            //zoom -= 0.1;
         }
         if (currentlyPressedKeys[34]) {
             // Page Down
-            zoom += 0.1;
+            //zoom += 0.1;
         }
         if (currentlyPressedKeys[38]) {
             // Up cursor key
-            tilt += 2;
+            //tilt += 2;
+            document.getElementById('flicker').value = parseFloat(document.getElementById('flicker').value) + .01
         }
         if (currentlyPressedKeys[40]) {
             // Down cursor key
-            tilt -= 2;
+            //tilt -= 2;
+             document.getElementById('flicker').value = parseFloat(document.getElementById('flicker').value) - .01
         }
         if (currentlyPressedKeys[37]) {
             // left cursor key
-            rotate -= 2;
+            //rotate -= 2;
         }
         if (currentlyPressedKeys[39]) {
             // right cursor key
-            rotate += 2;
+            //rotate += 2;
         }
 
     }
@@ -336,7 +338,7 @@ function setupWebAudio() {
         mat4.rotate(mvMatrix, degToRad(-this.angle), [0.0, 1.0, 0.0]);
         mat4.rotate(mvMatrix, degToRad(-tilt), [0.0, 1.0, 0.0]);
         
-        if (this.height > this.last_height) {
+        if (this.height > this.last_height && this.height > document.getElementById("flicker").value) {
             // Draw a non-rotating star in the alternate "twinkling" color
             gl.uniform3f(shaderProgram.colorUniform, this.twinkleR, this.twinkleG, this.twinkleB);
             drawStar();
@@ -347,7 +349,9 @@ function setupWebAudio() {
 
         // Draw the star in its main color
         gl.uniform3f(shaderProgram.colorUniform, this.r, this.g, this.b);
-        drawStar()
+        if(this.height > document.getElementById("flicker").value){
+            drawStar();
+        }
 
         mvPopMatrix();
     };
@@ -383,6 +387,7 @@ function setupWebAudio() {
 
         this.last_height = this.height;
         this.height = height/1000;
+        
     };
 
 
@@ -406,7 +411,7 @@ function setupWebAudio() {
     var stars = [];
 
     function initWorldObjects() {
-        var numStars = 2;
+        var numStars = 50;
 
         for (var i=0; i < numStars; i++) {
             //stars.push(new Star((i / numStars) * 5.0, i / numStars));
@@ -487,7 +492,7 @@ function setupWebAudio() {
 
         document.onkeydown = handleKeyDown;
         document.onkeyup = handleKeyUp;
-
+        canvas.focus();
         tick();
     }
 
@@ -498,11 +503,11 @@ function setupWebAudio() {
 
 
 <body onload="webGLStart();" style="background-color: black;">
-    <a href="http://learningwebgl.com/">&lt;&lt; Back to Web GL</a><br />
+    <a style="display:none" href="http://learningwebgl.com/">&lt;&lt; Back to Web GL</a>
     <div id="debug"></div>
     <audio id="music" src="/music/<?= $song ?>" preload="auto"></audio>
-    
-    <canvas id="textureCanvas">I'm sorry your browser does not support the HTML5 canvas element.</canvas>
+    <input style="display:none" type="text" id="flicker" value="0" />
+    <canvas style="display:none" id="textureCanvas">I'm sorry your browser does not support the HTML5 canvas element.</canvas>
     <script>
 	var canvas =  document.getElementById('textureCanvas');
 	canvas.height = 25;
@@ -517,7 +522,6 @@ function setupWebAudio() {
         ctx.fillText("<?= $song ?>", canvas.width/2, canvas.height/2);
     </script>
     <canvas id="lesson09-canvas" style="border: none;" width="1024" height="500"></canvas>
-<iframe src="https://embed.spotify.com/?uri=spotify:user:samchoi:starred" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
 </body>
 
 </html>
