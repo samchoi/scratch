@@ -247,12 +247,12 @@ function setupWebAudio() {
         if (currentlyPressedKeys[38]) {
             // Up cursor key
             //tilt += 2;
-            document.getElementById('flicker').value = parseFloat(document.getElementById('flicker').value) + .01
+            document.getElementById('flicker').value = parseFloat(document.getElementById('flicker').value) + 1
         }
         if (currentlyPressedKeys[40]) {
             // Down cursor key
             //tilt -= 2;
-             document.getElementById('flicker').value = parseFloat(document.getElementById('flicker').value) - .01
+             document.getElementById('flicker').value = parseFloat(document.getElementById('flicker').value) - 1
         }
         if (currentlyPressedKeys[37]) {
             // left cursor key
@@ -323,6 +323,7 @@ function setupWebAudio() {
         this.rotationSpeed = rotationSpeed;
         this.start_height = start_height; 
         this.flyout = false;
+        this.sound = 0;
         // Set the colors to a starting value.
         this.randomiseColors();
     }
@@ -338,7 +339,7 @@ function setupWebAudio() {
         mat4.rotate(mvMatrix, degToRad(-this.angle), [0.0, 1.0, 0.0]);
         mat4.rotate(mvMatrix, degToRad(-tilt), [0.0, 1.0, 0.0]);
         
-        if (this.height > this.last_height && this.height > document.getElementById("flicker").value) {
+        if (this.height > this.last_height && this.sound > document.getElementById("flicker").value) {
             // Draw a non-rotating star in the alternate "twinkling" color
             gl.uniform3f(shaderProgram.colorUniform, this.twinkleR, this.twinkleG, this.twinkleB);
             drawStar();
@@ -349,7 +350,7 @@ function setupWebAudio() {
 
         // Draw the star in its main color
         gl.uniform3f(shaderProgram.colorUniform, this.r, this.g, this.b);
-        if(this.height > document.getElementById("flicker").value){
+        if(this.sound > document.getElementById("flicker").value){
             drawStar();
         }
 
@@ -455,7 +456,8 @@ function setupWebAudio() {
             var elapsed = timeNow - lastTime;
 
             for (var i in stars) {
-                stars[i].animate(elapsed, freqByteData[i*2]*10);
+                stars[i].animate(elapsed, freqByteData[i*2]*6);
+                stars[i].sound = freqByteData[i*2];
             }
         }
         lastTime = timeNow;
