@@ -149,7 +149,6 @@ function setupWebAudio() {
         shaderProgram.colorUniform = gl.getUniformLocation(shaderProgram, "uColor");
     }
 
-
     function handleLoadedTexture(texture) {
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -161,7 +160,7 @@ function setupWebAudio() {
     }
 
 
-    var starTexture, wordTexture;
+    var starTexture, wordTexture, mainTexture;
 
     function initTexture() {
         //star
@@ -171,19 +170,48 @@ function setupWebAudio() {
             handleLoadedTexture(starTexture)
         }
 
-        starTexture.image.src = "star.gif";
         
-        //text
-        wordTexture = gl.createTexture();
-        canvas = document.getElementById('textureCanvas')
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.bindTexture(gl.TEXTURE_2D, wordTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas); // This is the important line!
+        starTexture.image.src = "star.gif";
+        wordTexture = word("<?= $song ?>");
+        mainTexture = starTexture;
+
+    }
+
+    function word(text){
+        var canvas = document.createElement('canvas');
+        canvas.id     = "hiddenCanvas";
+        canvas.width  = 512;
+        canvas.height = 512;
+        canvas.style.display   = "none";
+        var body = document.getElementsByTagName("body")[0];
+        body.appendChild(canvas);        
+
+        // draw texture
+        var cubeImage = document.getElementById('hiddenCanvas');
+        var ctx = cubeImage.getContext('2d');
+        ctx.beginPath();
+        ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);            
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.fillStyle = 'black';
+        ctx.font = "65px Arial";
+        ctx.textAlign = 'center';            
+        ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height / 2);
+        ctx.restore();
+             
+
+        // create new texture
+        var texture = gl.createTexture();
+        texture.image = canvas
+        gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        handleLoadedTexture(texture) 
+        
+        return texture;
     }
+
 
 
     var mvMatrix = mat4.create();
@@ -256,10 +284,12 @@ function setupWebAudio() {
         }
         if (currentlyPressedKeys[37]) {
             // left cursor key
+            mainTexture = wordTexture;
             //rotate -= 2;
         }
         if (currentlyPressedKeys[39]) {
             // right cursor key
+            mainTexture = starTexture;
             //rotate += 2;
         }
 
@@ -299,7 +329,7 @@ function setupWebAudio() {
 
     function drawStar() {
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, starTexture);
+        gl.bindTexture(gl.TEXTURE_2D, mainTexture);
         gl.uniform1i(shaderProgram.samplerUniform, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, starVertexTextureCoordBuffer);
@@ -339,7 +369,7 @@ function setupWebAudio() {
         mat4.rotate(mvMatrix, degToRad(-this.angle), [0.0, 1.0, 0.0]);
         mat4.rotate(mvMatrix, degToRad(-tilt), [0.0, 1.0, 0.0]);
         
-        if (this.height > this.last_height && this.sound > document.getElementById("flicker").value) {
+        if (this.height > this.last_height+.075 && this.sound > document.getElementById("flicker").value) {
             // Draw a non-rotating star in the alternate "twinkling" color
             gl.uniform3f(shaderProgram.colorUniform, this.twinkleR, this.twinkleG, this.twinkleB);
             drawStar();
@@ -509,20 +539,8 @@ function setupWebAudio() {
     <div id="debug"></div>
     <audio id="music" src="/music/<?= $song ?>" preload="auto"></audio>
     <input style="display:none" type="text" id="flicker" value="0" />
-    <canvas style="display:none" id="textureCanvas">I'm sorry your browser does not support the HTML5 canvas element.</canvas>
-    <script>
-	var canvas =  document.getElementById('textureCanvas');
-	canvas.height = 25;
-	//canvas.width = 50;
-        canvas.style.backgroundColor = 'green';
-        var ctx = canvas.getContext('2d');
-	
-        ctx.fillStyle = "#333333"; 	// This determines the text colour, it can take a hex value or rgba value (e.g. rgba(255,0,0,0.5))
-        ctx.textAlign = "center";	// This determines the alignment of text, e.g. left, center, right
-        ctx.textBaseline = "middle";	// This determines the baseline of the text, e.g. top, middle, bottom
-        ctx.font = "12px monospace";	// This determines the size of the text and the font family used
-        ctx.fillText("<?= $song ?>", canvas.width/2, canvas.height/2);
-    </script>
+    <canvas style="" id="textureCanvas">I'm sorry your browser does not support the HTML5 canvas element.</canvas>
+    
     <canvas id="lesson09-canvas" style="border: none;" width="1024" height="500"></canvas>
 </body>
 
