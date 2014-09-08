@@ -1,0 +1,229 @@
+// -- THIS CODE WAS TAKEN WITH THE PERMISSION OF ONE KINGS LANE --
+// -- It is proprietary and can only be used for read only purposes to evaluate Samuel Choi --
+// -- Original Github source : https://github.com/okl/assets/blob/master/store/sass/Checkout/_microcart_v2.scss --
+
+#micro-cart-container{
+  @include transition-duration(400ms);
+  opacity: 0;
+  position: absolute;
+  overflow: hidden;
+  cursor: auto;
+  right: -18px;
+  top: 27px;
+  z-index: 110;
+  .ie &{
+    display: none;
+  }
+  .pointerevents & { // standards browsers can animate the menu
+    pointer-events: none;
+  }
+  &.active{
+    @include transition-duration(300ms);
+    opacity: 1;
+    pointer-events: all;
+    .ie &{
+      display: block;
+    }
+  }
+  .carat-up{
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #f0f0f0;
+    margin-left: 322px;
+  }
+  a{
+    text-indent: inherit;
+    display: inline;
+  }
+  float: right;
+  li{
+    display: block;
+    line-height: 21px;
+    padding-top: 3px;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-left: 2px solid #f0f0f0;
+    border-right: 2px solid #f0f0f0;
+    &.subtotal, &.checkout{
+      padding: 0;
+    }
+    &.checkout{
+      height: 60px;
+    }
+  }
+
+  #micro-cart-v2{
+    text-transform: inherit;
+    background-color: #fff;
+    width: 354px;
+    .ie &{
+      width: 370px
+    }
+    border: none;
+    .cart-timer{
+      @extend %proxima-nova;
+      color: #666;
+      text-align: left;
+      padding: 20px 24px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #f2f2f2;
+      border-top: 2px solid #f2f2f2;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      .time-left{
+        color: $okl-coral;
+        &.cart-expired{
+          color: #ff0000;
+        }
+      }
+    }
+    .cart-lines-container{
+      border: none;
+      border-bottom: 1px solid #f2f2f2;
+      max-height: 350px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      padding: 0;
+      .cart-lines{
+        font-size: 14px;
+        border:none;
+        margin-bottom: -1px;
+        overflow: hidden;
+        border-left: 2px solid #f0f0f0;
+        border-right: 2px solid #f0f0f0;
+        .micro-cart-line{
+          width: 350px;
+          overflow: hidden;
+          min-height: 105px;
+          border: none;
+          border-bottom: 1px solid #f2f2f2;
+          &.deleted{
+            @include transition-duration(400ms);
+            padding: 0;
+            min-height: 0;
+            height: 0;
+            opacity: 0;
+          }
+          a.image{
+            height: initial;
+            display: block;
+            float: left;
+            //margin: 15px 0 0 19px;
+            margin: 24px 0 0 20px;;
+            .thumbnail{
+              width: 100px;
+            }
+          }
+
+          .info{
+            display: inline-block;
+            font-family: $serif;
+            width: 215px;
+            float:left;
+            margin: 0 0 20px 15px;
+            .row-1{
+              overflow: hidden;
+              margin-top: 15px;
+              min-height: 25px;
+              a.name{
+                @extend %miller-banner-roman;
+                display: inline-block;
+                width: 155px;
+                margin-top: 4px;
+                text-indent: inherit;
+                overflow: auto;
+                white-space: normal;
+                display: inline;
+                float: left;
+                text-transform: capitalize;
+                color: #333;
+                letter-spacing: 0px;
+                font-size: 16px;
+              }
+              a.remove{
+                border: 1px solid #ebebeb;
+                font-size: 16px;
+                text-decoration: none;
+                float: right;
+                padding: 0px 5px 1px 6px;
+                margin-right: 22px;
+                color: #adadad;
+                border-radius: 3px;
+                &.hidden{
+                  display: none;
+                }
+              }
+            }
+            .row-2{
+              margin-top: 10px;
+              span.quantity{
+                float: left;
+                @extend %proxima-nova-light;
+                color: #333;
+                font-size: 12px;
+                margin-top: 5px;
+              }
+              span.price{
+                font-family: $serif;
+                font-size: 14px;
+                text-align: right;
+                color: #666;
+                margin-right: 24px;
+                letter-spacing: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .subtotal{
+      letter-spacing: 0em;
+      font-size: 15px;
+      padding: 22px 24px;
+      color: #666;
+      border-top: none;
+      label{
+        @extend %miller-banner-roman;
+        font-size: 14px;
+        float: left;
+        text-transform: capitalize;
+        padding-top: 5px;
+      }
+      .amount{
+        font-family: $serif;
+        text-align: right;
+      }
+    }
+    .checkout{
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      overflow: hidden;
+      border-bottom: 2px solid #f0f0f0;
+      border-top: none;
+      .checkout-btn{
+        display: block;
+        background-color: $okl-coral;
+        margin: 0;
+        height: 60px;
+        line-height: 60px;
+        @extend %proxima-nova-semibold;
+        font-size: 14px;
+        letter-spacing: .03em;
+        color: #fff;
+        text-align: center;
+        padding: 0;
+        text-decoration: none;
+        text-transform: uppercase;
+        &:after{
+          content: '';
+        }
+      }
+
+    }
+  }
+}

@@ -1,0 +1,135 @@
+// -- THIS CODE WAS TAKEN WITH THE PERMISSION OF ONE KINGS LANE --
+// -- It is proprietary and can only be used for read only purposes to evaluate Samuel Choi --
+// -- Original Github Source : https://github.com/okl/assets/blob/bb818ccec359e7a1988db561bbd2c3cd3692e682/store/sass/Story/_story.scss#L1389 --
+// code redacted by request of One Kings Lane
+
+.urgency{
+  position: absolute;
+  top: 25px;
+  padding: 5px;
+
+}
+
+//add to cart from edp
+.pdp-info{
+  @include transition-duration(300ms);
+  position: absolute;
+  bottom: 43px;
+  background-color: rgba(255, 255, 255, 0.90);
+  height: 42px;
+  width: 350px;
+
+  //hide the dropdown by default
+  .cart-tile {
+    opacity: 0;
+    height: 0;
+  }
+
+  &.active{
+    @include transition-duration(350ms);
+    padding-top: 24px;
+    height: 80px;
+    .cart-tile{
+      opacity: 1;
+      height: auto;
+      margin: 20px 0 24px 0;
+      .button{
+        cursor: pointer;
+        @extend %proxima-nova-semibold;
+        float: left;
+        line-height: 31px;
+        color: #fff;
+        text-transform: uppercase;
+        background-color: #f76c49;
+        margin: 0 0 0 15px;
+        padding: 5px 15px;
+        &.add-to-cart{
+        }
+        &.checkout{
+        }
+        &.pending{
+        }
+        &.added{
+          color: #008046;
+          background-color: #fff;
+        }
+      }
+      .select {
+        @extend %proxima-nova-semibold;
+        cursor: pointer;
+        font-size: 13px;
+        float: left;
+        min-width: 50px;
+        max-width: 115px;
+        margin: 0 0 0 5px;
+        position: relative;
+        h3 {
+          border: 1px solid #e7e7e7;
+          line-height: 38px;
+          margin: 0;
+          em {
+            @extend %proxima-nova-semibold;
+            background-color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            min-width: 20px;
+            max-width: 65px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0 20 0 0px;
+
+            &:after { // downward arrow
+              border: 5px solid #fff;
+              border-top-color: #6f6d68;
+              content: "";
+              display: block;
+              height: 0;
+              position: absolute;
+              right: 0px;
+              top: 7px;
+              width: 0;
+            }
+          }
+        }
+
+        ul.dd {
+          @include box-sizing(border-box);
+          @include transition(opacity 75ms ease-out);
+          background: #fff;
+          border: 1px solid #e7e7e7;
+          position: absolute;
+          right: 0;
+          bottom: 40px;
+          cursor: pointer;
+          width: 100%;
+          z-index: 1;
+          max-height: 300px;
+          overflow: hidden;
+          overflow-y: scroll;
+          opacity: 0;
+          &.active{
+            opacity: 1;
+
+          }
+
+          li {
+            font-size: 13px;
+            height: 40px;
+            min-width: 70px;
+            line-height: 40px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e7e7e7;
+            &:hover {
+              color: #fff;
+              background-color: #364d62;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+//code redacted by request of One Kings Lane
+

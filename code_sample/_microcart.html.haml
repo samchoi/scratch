@@ -1,0 +1,27 @@
+-# -- THIS CODE WAS TAKEN WITH THE PERMISSION OF ONE KINGS LANE --
+-# -- It is proprietary and can only be used for read only purposes to evaluate Samuel Choi --
+-# -- Original Github Source : https://github.com/okl/ewok/blob/0c56ce9be4c6999dac5edacb8eac97d88cb542be/app/views/cart/_microcart.html.haml --
+-if cart
+  %ul#micro-cart-v2{ data: { expiration_time: cart[:expiration_time]}}
+    %li.cart-timer
+      %p.reservation-timer-container
+        Items reserved for
+        %span.time-left
+    %li.cart-lines-container
+      %ul.cart-lines
+        -cart[:cart_lines].each do |cl|
+          =render partial: 'cart/micro_cartline', locals: { cart_line: cl }
+    -if false
+      %li.shipping
+    %li.subtotal
+      %label
+        Subtotal
+      %span.amount
+        ="$#{sprintf( "%.2f", cart[:subtotal])}"
+    %li.checkout
+      %a{href:'/checkout', class: 'checkout-btn'}
+        Checkout Now
+  -if false
+    %li.paypal
+      %a{ href: paypal_path }
+        Paypal
